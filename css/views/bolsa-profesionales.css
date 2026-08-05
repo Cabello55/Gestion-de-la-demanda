@@ -1,0 +1,91 @@
+/* Vista Bolsa de Profesionales */
+
+.bolsa {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.bolsa__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.bolsa__title {
+  margin: 0;
+  font-size: clamp(24px, 2.4vw, 30px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+.bolsa__subtitle {
+  margin: 0;
+  font-size: 15px;
+  color: var(--color-muted);
+  line-height: 1.5;
+}
+
+.bolsa__pending {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Banner informativo (rol Profesional) */
+
+.bolsa-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-2);
+  border: 1px solid color-mix(in srgb, var(--ayesa-azul-cielo) 45%, var(--color-border));
+  background: color-mix(in srgb, var(--ayesa-azul-cielo) 12%, var(--color-blanco));
+}
+
+.bolsa-banner__icon {
+  color: var(--color-azul-electrico);
+  font-size: 16px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.bolsa-banner__text {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+  line-height: 1.45;
+}
+
+.bolsa-results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.bolsa-footer {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.bolsa-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-5);
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-2);
+}
+
+.bolsa-empty__text {
+  margin: 0;
+  font-size: 15px;
+  color: var(--color-muted);
+  line-height: 1.5;
+  max-width: 42ch;
+}

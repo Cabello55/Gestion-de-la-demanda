@@ -1,0 +1,314 @@
+.btn {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-radius: var(--radius-1);
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.btn--primary {
+  background: var(--color-azul-electrico);
+  border-color: var(--color-azul-electrico);
+  color: var(--color-blanco);
+}
+
+.btn--ghost {
+  background: transparent;
+}
+
+.link {
+  padding: 8px 10px;
+  border-radius: var(--radius-1);
+  display: block;
+  border: 1px solid transparent;
+}
+
+.link:hover {
+  border-color: var(--color-border);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+@media (max-width: 900px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.role-card {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  border-radius: var(--radius-2);
+  padding: var(--space-4);
+}
+
+.role-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+}
+
+.role-card__title {
+  font-weight: 900;
+  margin: 0;
+  font-size: 14px;
+}
+
+.role-card__desc {
+  margin-top: var(--space-2);
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
+.section-title {
+  margin: 0 0 var(--space-3);
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.muted {
+  color: var(--color-muted);
+}
+
+.badge-estado {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.badge-estado--exito {
+  color: var(--ayesa-negro);
+  background: color-mix(in srgb, var(--color-estado-disponible) 28%, var(--color-blanco));
+  border-color: color-mix(in srgb, var(--color-estado-disponible) 55%, var(--color-blanco));
+}
+
+.badge-estado--aviso {
+  color: var(--ayesa-negro);
+  background: color-mix(in srgb, var(--color-estado-solicitado) 28%, var(--color-blanco));
+  border-color: color-mix(in srgb, var(--color-estado-solicitado) 55%, var(--color-blanco));
+}
+
+.badge-estado--info {
+  color: var(--ayesa-negro);
+  background: color-mix(in srgb, var(--color-estado-reservado) 28%, var(--color-blanco));
+  border-color: color-mix(in srgb, var(--color-estado-reservado) 55%, var(--color-blanco));
+}
+
+.badge-estado--asignado {
+  color: var(--ayesa-blanco);
+  background: var(--color-estado-asignado);
+  border-color: var(--color-estado-asignado);
+}
+
+.badge-estado--neutro {
+  color: var(--color-muted);
+  background: color-mix(in srgb, var(--color-estado-no-disponible) 22%, var(--color-blanco));
+  border-color: var(--color-border);
+}
+
+.badge-estado--error {
+  color: var(--ayesa-blanco);
+  background: var(--ayesa-magenta);
+  border-color: var(--ayesa-magenta);
+}
+
+/* Card profesional (Bolsa de resultados) */
+
+.card-profesional {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2);
+}
+
+.card-profesional__main {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  min-width: 0;
+  flex: 1;
+}
+
+.card-profesional__avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-azul-electrico);
+  background: color-mix(in srgb, var(--color-azul-electrico) 10%, var(--color-blanco));
+  border: 1px solid var(--color-border);
+}
+
+.card-profesional__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+  flex: 1;
+}
+
+.card-profesional__identity {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.card-profesional__name {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+}
+
+.card-profesional__role {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+.card-profesional__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-4);
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.card-profesional__disponibilidad {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.card-profesional__pct {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.card-profesional__ubicacion {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-profesional__tags {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.card-profesional__tag {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  color: var(--color-azul-electrico);
+  background: color-mix(in srgb, var(--color-azul-electrico) 8%, var(--color-blanco));
+  border: 1px solid color-mix(in srgb, var(--color-azul-electrico) 22%, var(--color-border));
+}
+
+.card-profesional__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-5);
+  font-size: 13px;
+  color: var(--color-text);
+}
+
+.card-profesional__facts strong {
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.card-profesional__matching {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 360px;
+}
+
+.card-profesional__matching-label {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.card-profesional__matching-label strong {
+  color: var(--color-azul-electrico);
+  font-weight: 700;
+}
+
+.card-profesional__matching-track {
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-border) 70%, var(--color-blanco));
+  overflow: hidden;
+}
+
+.card-profesional__matching-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--ayesa-turquesa);
+}
+
+.card-profesional__actions {
+  display: flex;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+
+@media (max-width: 720px) {
+  .card-profesional {
+    flex-direction: column;
+  }
+
+  .card-profesional__actions {
+    align-items: stretch;
+  }
+
+  .card-profesional__actions .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+

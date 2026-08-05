@@ -1,0 +1,60 @@
+:root {
+  /* ── Colores primarios (Design System Ayesa Digital) ── */
+  --ayesa-azul-electrico: #0000d0;
+  --ayesa-magenta: #ff3184;
+  --ayesa-blanco: #ffffff;
+  --ayesa-negro: #000000;
+
+  /* ── Colores secundarios ── */
+  --ayesa-azul-cielo: #06cdff;
+  --ayesa-turquesa: #43d8c9;
+  --ayesa-indigo-lavanda: #ab76ff;
+  --ayesa-naranja: #ff6d2e;
+  --ayesa-amarillo: #f5e300;
+
+  /* Alias semánticos (compatibilidad con CSS existente) */
+  --color-azul-electrico: var(--ayesa-azul-electrico);
+  --color-magenta: var(--ayesa-magenta);
+  --color-blanco: var(--ayesa-blanco);
+  --color-negro: var(--ayesa-negro);
+
+  --color-secundario-1: var(--ayesa-azul-cielo);
+  --color-secundario-2: var(--ayesa-turquesa);
+  --color-secundario-3: var(--ayesa-indigo-lavanda);
+  --color-secundario-4: var(--ayesa-naranja);
+  --color-secundario-5: var(--ayesa-amarillo);
+
+  /* ── Tipografía ── */
+  --font-primary: 'Metropolis', Arial, sans-serif;
+  --font-fallback: Arial, sans-serif;
+
+  /* ── Espaciados (pendiente de guía de componentes) ── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  /* ── Bordes (pendiente de guía de componentes) ── */
+  --radius-1: 6px;
+  --radius-2: 12px;
+
+  /*
+   * Estados del profesional — mapeo provisional basado en paleta secundaria
+   * (patrón observado en App2U/RODAS/SmartJob Planner, sección 5 del DS).
+   * Pendiente de validación formal en fase de diseño visual.
+   */
+  --color-estado-disponible: var(--ayesa-turquesa);
+  --color-estado-solicitado: var(--ayesa-naranja);
+  --color-estado-reservado: var(--ayesa-azul-cielo);
+  --color-estado-asignado: var(--ayesa-indigo-lavanda);
+  --color-estado-no-disponible: #95a5a6;
+
+  /* ── Tokens de UI (pendiente de guía de componentes) ── */
+  --color-bg: #f6f7fb;
+  --color-text: var(--ayesa-negro);
+  --color-muted: #667085;
+  --color-border: #e4e7ec;
+  --color-surface: var(--ayesa-blanco);
+}
