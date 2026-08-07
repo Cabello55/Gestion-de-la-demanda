@@ -26,6 +26,39 @@ function buildSeedData() {
   };
 }
 
+function migrateHistoricoEstados(historico = []) {
+  return historico.map((h) => ({
+    ...h,
+    motivo: h.motivo ?? h.comentario ?? 'Cambio de estado',
+  }));
+}
+
+function migrateValoraciones(valoraciones = []) {
+  return valoraciones.map((v) => ({
+    comunicacion: 4.0,
+    autonomia: 4.0,
+    trabajoEquipo: 4.0,
+    responsable: '—',
+    comentario: '',
+    ...v,
+  }));
+}
+
+function defaultHistoricoDisponibilidadPersonal(prof) {
+  if ((prof.historicoDisponibilidadPersonal ?? []).length) {
+    return prof.historicoDisponibilidadPersonal;
+  }
+  return [
+    { fecha: '2025-01-01', porcentaje: 40 },
+    { fecha: '2025-03-01', porcentaje: 55 },
+    { fecha: '2025-05-01', porcentaje: 45 },
+    { fecha: '2025-07-01', porcentaje: 60 },
+    { fecha: '2025-09-01', porcentaje: 50 },
+    { fecha: '2025-11-01', porcentaje: 70 },
+    { fecha: '2026-01-01', porcentaje: prof.disponibilidad?.porcentaje ?? 80 },
+  ];
+}
+
 function migrateProfesionales(profesionales = []) {
   return profesionales.map((p) => {
     const skills = (p.skills ?? []).map((s) =>
@@ -40,7 +73,30 @@ function migrateProfesionales(profesionales = []) {
       fecha: p.cv?.actualizado ?? '2026-01-01',
       tipo: 'Alta nueva',
     };
-    return { ...p, skills, cv, validacion };
+    const matchingDemo = p.matchingDemo ?? 85;
+    const experiencia = p.experiencia ?? [];
+    const formacion = p.formacion ?? [];
+    const certificaciones = p.certificaciones ?? [];
+    const resumenProfesional = p.resumenProfesional ?? '';
+    const historicoDisponibilidadProf = p.historicoDisponibilidadProf ?? [];
+    const historicoEstados = migrateHistoricoEstados(p.historicoEstados);
+    const valoraciones = migrateValoraciones(p.valoraciones);
+    const historicoDisponibilidadPersonal = defaultHistoricoDisponibilidadPersonal(p);
+    return {
+      ...p,
+      skills,
+      cv,
+      validacion,
+      matchingDemo,
+      experiencia,
+      formacion,
+      certificaciones,
+      resumenProfesional,
+      historicoDisponibilidadProf,
+      historicoEstados,
+      valoraciones,
+      historicoDisponibilidadPersonal,
+    };
   });
 }
 
@@ -71,7 +127,13 @@ export function seedIfNeeded() {
           p.cv == null ||
           !('requiereActualizacion' in (p.cv ?? {})) ||
           !Array.isArray(p.historicoEstados) ||
-          p.validacion == null
+          p.validacion == null ||
+          p.matchingDemo == null ||
+          !Array.isArray(p.experiencia) ||
+          (p.historicoEstados ?? []).some((h) => !h.motivo) ||
+          (p.valoraciones ?? []).some((v) => v.comunicacion == null) ||
+          (p.historicoDisponibilidadPersonal ?? []).length < 6 ||
+          (p.id === 'PROF-001' && !p.resumenProfesional)
       ) || (parsed.profesionales ?? []).length < seed.profesionales.length;
 
     if (needsRefreshProf) {
@@ -83,6 +145,14 @@ export function seedIfNeeded() {
         parsed.profesionales = migrated;
         changed = true;
       }
+    }
+
+    if ((parsed.compromisos ?? []).length !== seed.compromisos.length) {
+      parsed.compromisos = seed.compromisos;
+      changed = true;
+    } else if ((parsed.compromisos ?? []).some((c) => c.id === 'COM-003' && !c.solicitudId)) {
+      parsed.compromisos = seed.compromisos;
+      changed = true;
     }
 
     if ((parsed.solicitudes ?? []).length !== seed.solicitudes.length) {

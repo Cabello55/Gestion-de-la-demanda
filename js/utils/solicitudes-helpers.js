@@ -95,6 +95,60 @@ export function getSolicitudesRecientes(solicitudes, limit = 4) {
     .slice(0, limit);
 }
 
+export function getSolicitudesPorProfesional(solicitudes, profesionalId) {
+  return (solicitudes ?? []).filter((s) => s.profesionalId === profesionalId);
+}
+
+export function getSolicitudesAmbitoRp(solicitudes, userId) {
+  return getSolicitudesPorRp(solicitudes, userId);
+}
+
+export function getSolicitudesAmbitoKcmEquipo(solicitudes, kcmId) {
+  return getSolicitudesPorKcm(solicitudes, kcmId);
+}
+
+export function puedeEditarSolicitud(estado) {
+  return estado === 'Pendiente' || estado === 'En entrevista';
+}
+
+export function puedeCancelarSolicitud(estado) {
+  return !['Finalizada', 'Rechazada', 'Cancelada'].includes(estado);
+}
+
+export function contarResumenProfesional(solicitudes) {
+  return contarResumenSolicitudes(solicitudes);
+}
+
+export function contarResumenSolicitudes(solicitudes) {
+  const list = solicitudes ?? [];
+  return {
+    total: list.length,
+    pendientes: list.filter((s) => s.estado === 'Pendiente' || s.estado === 'En entrevista').length,
+    aprobadas: list.filter((s) => s.estado === 'Aprobada').length,
+    rechazadas: list.filter((s) => s.estado === 'Rechazada').length,
+    finalizadas: list.filter((s) => s.estado === 'Finalizada').length,
+  };
+}
+
+export const TAB_FILTROS_PROFESIONAL = {
+  todas: () => true,
+  pendientes: (s) => s.estado === 'Pendiente' || s.estado === 'En entrevista',
+  aprobadas: (s) => s.estado === 'Aprobada',
+  rechazadas: (s) => s.estado === 'Rechazada',
+  finalizadas: (s) => s.estado === 'Finalizada',
+};
+
+export function filtrarSolicitudesPorTab(solicitudes, tabId = 'todas') {
+  const filtro = TAB_FILTROS_PROFESIONAL[tabId] ?? TAB_FILTROS_PROFESIONAL.todas;
+  return (solicitudes ?? []).filter(filtro);
+}
+
+export function ordenarSolicitudesPorFecha(solicitudes) {
+  return [...(solicitudes ?? [])].sort((a, b) =>
+    String(b.fechaSolicitud).localeCompare(String(a.fechaSolicitud))
+  );
+}
+
 /** Helper de conveniencia desde estado global. */
 export function snapshotSolicitudes() {
   return {

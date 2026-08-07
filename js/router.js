@@ -114,6 +114,11 @@ function resolveAndRender() {
     case 'solicitudes':
       mountUnaVista(renderSolicitudesView, ctx, './css/views/solicitudes.css', ruta);
       break;
+    case 'profesionales':
+      mountUnaVista((c) => {
+        c.innerHTML = '';
+      }, ctx, '', ruta);
+      break;
     case 'mi-perfil':
       mountUnaVista(renderMiPerfilView, ctx, './css/views/mi-perfil.css', ruta);
       break;

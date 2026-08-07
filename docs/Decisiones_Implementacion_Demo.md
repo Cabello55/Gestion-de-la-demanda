@@ -52,7 +52,27 @@ Datos demo: `js/data/mock-compromisos.js`.
 
 ---
 
-*Última actualización: Bolsa PROFESIONAL.*
+*Última actualización: Ficha RP/KCM.*
+
+---
+
+## Ficha del profesional — rol RP / KCM
+
+Misma rama (`renderFichaTerceros`), tabs unificados con Profesional. Comparador compartido vía `comparador-state.js`. Matching contextual si `?solicitudId=`. Coste y valoraciones visibles; solo lectura.
+
+## Ficha del profesional — rol PROFESIONAL (vista propia)
+
+Solo puede ver su propia ficha. Tabs: Resumen + 7 pestañas dedicadas. Ocultos: coste, matching, valoraciones. Datos ampliados en PROF-001 (`resumenProfesional`, `experiencia`, `formacion`, `certificaciones`, etc.).
+
+## Bolsa de Profesionales — rol GDD
+
+Cabecera Exportar CSV + Nuevo profesional (`?validado=true`). Filtros con "Todos" e "Incluir no disponibles". Tabla con columna Estado y acciones (editar, agendar, menú). Comparador/paginación reutilizados de RP.
+
+## Bolsa de Profesionales — rol RP / KCM
+
+**RP y KCM: vista idéntica** (misma rama `renderBolsaBusqueda`, sin código duplicado ni rama KCM separada). Diferencias de rol solo en sidebar/header (`NAVEGACION_POR_ROL`) y en Solicitudes.
+
+Buscador completo: filtros, tabla, ordenación, paginación (10/pág), comparador (máx. 4), guardar búsqueda en `localStorage.busquedasGuardadas`. Campo `matchingDemo` en profesionales.
 
 ---
 

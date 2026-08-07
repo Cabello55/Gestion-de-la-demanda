@@ -4,6 +4,8 @@ export const catalogoRp = [
   { id: 'USR-RP-002', nombre: 'Laura Gómez' },
   { id: 'USR-RP-003', nombre: 'Carlos Ruiz' },
   { id: 'USR-RP-004', nombre: 'María López' },
+  { id: 'USR-RP-005', nombre: 'Marta López' },
+  { id: 'USR-KCM-001', nombre: 'Javier Vidal' },
 ];
 
 export function getNombreRp(rpId) {

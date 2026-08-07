@@ -150,3 +150,23 @@ export function actualizarSolicitud(solicitudId, mutator) {
   persistData();
   emit();
 }
+
+export function actualizarCompromiso(compromisoId, mutator) {
+  const idx = state.compromisos.findIndex((c) => c.id === compromisoId);
+  if (idx === -1) return;
+
+  const updated = mutator(structuredClone(state.compromisos[idx]));
+  state.compromisos[idx] = updated;
+  persistData();
+  emit();
+}
+
+export function actualizarConflicto(conflictoId, mutator) {
+  const idx = state.conflictos.findIndex((c) => c.id === conflictoId);
+  if (idx === -1) return;
+
+  const updated = mutator(structuredClone(state.conflictos[idx]));
+  state.conflictos[idx] = updated;
+  persistData();
+  emit();
+}

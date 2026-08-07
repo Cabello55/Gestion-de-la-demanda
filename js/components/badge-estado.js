@@ -55,7 +55,7 @@ function inferVariante(label) {
   ) {
     return 'aviso';
   }
-  if (key === 'en entrevista' || key === 'reservado') {
+  if (key === 'en entrevista' || key === 'reservado' || key === 'reservada') {
     return 'info';
   }
   if (key === 'asignado') {

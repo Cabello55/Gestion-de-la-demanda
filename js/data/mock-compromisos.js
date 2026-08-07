@@ -20,10 +20,11 @@ export const mockCompromisos = [
   {
     id: 'COM-003',
     profesionalId: 'PROF-001',
+    solicitudId: 'SOL-2026-0458',
     tipo: 'Proyecto',
     titulo: 'Entrevista técnica — reserva',
     detalle: 'Validación de perfil con KCM de la cuenta.',
-    estadoBadge: 'En curso',
+    estadoBadge: 'Pendiente',
     fecha: '2026-08-08',
   },
 ];
