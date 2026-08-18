@@ -108,11 +108,34 @@
 /* ── Panel de selección de rol (derecha) ── */
 
 .login-main {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--space-5);
   background: var(--color-bg);
+}
+
+.login-logout-btn {
+  position: absolute;
+  top: var(--space-5);
+  right: var(--space-5);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-1);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-logout-btn:hover {
+  border-color: var(--ayesa-azul-electrico);
+  color: var(--ayesa-azul-electrico);
 }
 
 .login-panel {
@@ -313,4 +336,70 @@
   .login-role-card__arrow {
     display: none;
   }
+}
+
+/* ── Barrera de acceso previa a la demo ── */
+
+.site-access-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-5);
+  background: var(--color-bg);
+}
+
+.site-access-card {
+  max-width: 400px;
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2);
+  background: var(--color-surface);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.site-access-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.site-access-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.site-access-field__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.site-access-field__input {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-1);
+  padding: 12px 14px;
+  font: inherit;
+  color: var(--color-text);
+  background: var(--color-blanco);
+}
+
+.site-access-field__input:focus {
+  outline: 2px solid color-mix(in srgb, var(--ayesa-azul-electrico) 35%, transparent);
+  border-color: var(--ayesa-azul-electrico);
+}
+
+.site-access-form__error {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ayesa-magenta);
+}
+
+.site-access-form__submit {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 600;
 }

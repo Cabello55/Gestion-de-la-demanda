@@ -1,4 +1,5 @@
 import { getRolesDemo, loginByRole } from '../auth.js';
+import { salirDeLaDemo } from '../site-access.js';
 
 function renderRoleCard(rol) {
   return `
@@ -65,6 +66,15 @@ export function renderLoginView(container) {
       </aside>
 
       <main class="login-main">
+        <button
+          class="login-logout-btn"
+          type="button"
+          data-action="logout-demo"
+        >
+          <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
+          Cerrar sesión
+        </button>
+
         <div class="login-panel">
           <header class="login-panel__header">
             <h2 class="login-panel__title">Accede a la demo</h2>
@@ -92,4 +102,11 @@ export function renderLoginView(container) {
       window.location.hash = '#/inicio';
     });
   });
+
+  const logoutBtn = container.querySelector('[data-action="logout-demo"]');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      salirDeLaDemo();
+    });
+  }
 }
