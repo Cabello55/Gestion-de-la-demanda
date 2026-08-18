@@ -1,6 +1,5 @@
 import { getUsuarioActivo, getState } from './state.js';
 import { cerrarSesion } from './auth.js';
-import { salirDeLaDemo } from './site-access.js';
 import { renderLoginView } from './views/login.view.js';
 import { renderInicioView } from './views/inicio.view.js';
 import { renderBolsaProfesionalesView } from './views/bolsa-profesionales.view.js';
@@ -151,7 +150,7 @@ function resolveAndRender() {
     if (logoutBtn) {
       logoutBtn.onclick = () => {
         cerrarSesion();
-        salirDeLaDemo();
+        window.location.hash = '#/login';
       };
     }
   }
