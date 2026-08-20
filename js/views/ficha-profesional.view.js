@@ -830,22 +830,6 @@ function renderFichaTabs(profId, tabActivo, query) {
   `;
 }
 
-function renderMatchingBanner(prof, query) {
-  const pct = prof.matchingDemo ?? 0;
-  const conSolicitud = Boolean(query?.solicitudId);
-  const label = conSolicitud ? 'Matching con mi solicitud' : 'Matching general';
-  return `
-    <div class="ficha-matching">
-      <span class="ficha-matching__label">${label}: <strong>${pct}%</strong></span>
-      ${
-        conSolicitud
-          ? `<button type="button" class="ficha-link" data-action="matching-detalle">Ver detalle ›</button>`
-          : ''
-      }
-    </div>
-  `;
-}
-
 function renderAccionesGdd(prof) {
   return `
     <div class="ficha-hero__actions">
@@ -939,10 +923,6 @@ function wireFichaGdd(root, prof, profId, query, rerender) {
     } else {
       navegarNuevaSolicitud(prof.id);
     }
-  });
-
-  root.querySelector('[data-action="matching-detalle"]')?.addEventListener('click', () => {
-    showFichaToast(root, 'Detalle de matching — disponible en evolución futura');
   });
 
   root.querySelector('[data-action="ver-valoraciones"]')?.addEventListener('click', () => {
@@ -1071,10 +1051,6 @@ function wireFichaTerceros(root, prof, profId, query, rerender) {
     showFichaToast(root, 'Profesional guardado para más tarde');
   });
 
-  root.querySelector('[data-action="matching-detalle"]')?.addEventListener('click', () => {
-    showFichaToast(root, 'Detalle de matching — disponible en evolución futura');
-  });
-
   root.querySelector('[data-action="ver-valoraciones"]')?.addEventListener('click', () => {
     root.querySelector('[data-modal]')?.remove();
     root.insertAdjacentHTML('beforeend', renderModalValoraciones(prof));
@@ -1131,7 +1107,6 @@ function renderFichaGdd(container, prof, ctx) {
         ← Volver a resultados
       </button>
       ${renderFichaHero(prof, renderAccionesGdd(prof))}
-      ${renderMatchingBanner(prof, query)}
       ${renderFichaTabs(profId, tabActivo, query)}
       <div class="ficha-tabpanel" role="tabpanel">${renderTabContent(prof, tabActivo, 'gdd')}</div>
     </section>
@@ -1151,7 +1126,6 @@ function renderFichaTerceros(container, prof, ctx) {
         ← Volver a resultados
       </button>
       ${renderFichaHero(prof, renderAccionesTerceros(prof))}
-      ${renderMatchingBanner(prof, query)}
       ${renderFichaTabs(profId, tabActivo, query)}
       <div class="ficha-tabpanel" role="tabpanel">${renderTabContent(prof, tabActivo, 'tercero')}</div>
     </section>

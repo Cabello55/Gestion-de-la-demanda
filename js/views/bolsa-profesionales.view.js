@@ -39,7 +39,7 @@ function createBolsaState(defaultFiltros) {
   return {
     draftFiltros: { ...defaultFiltros },
     appliedFiltros: { ...defaultFiltros },
-    orden: 'matching',
+    orden: 'disponibilidad',
     pagina: 1,
     tab: 'busqueda',
   };

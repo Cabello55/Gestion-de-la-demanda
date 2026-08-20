@@ -3,7 +3,6 @@ export const ESTADOS_DISPONIBILIDAD = ['Disponible', 'Reservado', 'Asignado', 'N
 export const ESTADOS_GDD_MENU = ['Disponible', 'Reservado', 'Asignado', 'No disponible'];
 
 export const ORDEN_OPCIONES = [
-  { value: 'matching', label: 'Mejor matching' },
   { value: 'disponibilidad', label: 'Mayor disponibilidad' },
   { value: 'coste', label: 'Menor coste' },
   { value: 'experiencia', label: 'Más experiencia' },
@@ -125,20 +124,17 @@ export function filtrarProfesionales(profesionales = [], filtros = {}, variant =
   });
 }
 
-export function ordenarProfesionales(profesionales = [], orden = 'matching') {
+export function ordenarProfesionales(profesionales = [], orden = 'disponibilidad') {
   const list = [...profesionales];
 
   list.sort((a, b) => {
-    if (orden === 'disponibilidad') {
-      return (b.disponibilidad?.porcentaje ?? 0) - (a.disponibilidad?.porcentaje ?? 0);
-    }
     if (orden === 'coste') {
       return (a.coste?.tarifaDia ?? 0) - (b.coste?.tarifaDia ?? 0);
     }
     if (orden === 'experiencia') {
       return (b.experienciaAnios ?? 0) - (a.experienciaAnios ?? 0);
     }
-    return (b.matchingDemo ?? 0) - (a.matchingDemo ?? 0);
+    return (b.disponibilidad?.porcentaje ?? 0) - (a.disponibilidad?.porcentaje ?? 0);
   });
 
   return list;
@@ -157,25 +153,15 @@ export function paginar(lista = [], pagina = 1, pageSize = PAGE_SIZE) {
   };
 }
 
-export function matchingMostrable(profesional) {
-  if (profesional?.estado === 'No disponible') return null;
-  if (profesional?.matchingDemo == null) return null;
-  return profesional.matchingDemo;
-}
-
 export function exportarProfesionalesCsv(profesionales = []) {
-  const headers = ['Nombre', 'Rol', 'Estado', 'Disponibilidad %', 'Matching %', 'Coste/día'];
-  const rows = profesionales.map((p) => {
-    const matching = matchingMostrable(p);
-    return [
-      p.nombre ?? '',
-      p.rol ?? '',
-      p.estado ?? '',
-      p.disponibilidad?.porcentaje ?? '',
-      matching != null ? matching : '',
-      p.coste?.tarifaDia ?? '',
-    ];
-  });
+  const headers = ['Nombre', 'Rol', 'Estado', 'Disponibilidad %', 'Coste/día'];
+  const rows = profesionales.map((p) => [
+    p.nombre ?? '',
+    p.rol ?? '',
+    p.estado ?? '',
+    p.disponibilidad?.porcentaje ?? '',
+    p.coste?.tarifaDia ?? '',
+  ]);
 
   const escape = (v) => `"${String(v).replace(/"/g, '""')}"`;
   const csv = [headers, ...rows].map((row) => row.map(escape).join(',')).join('\n');

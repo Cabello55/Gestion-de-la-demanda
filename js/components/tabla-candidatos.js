@@ -3,7 +3,6 @@ import {
   getTagsProfesional,
   labelEstadoBolsa,
   labelSeniority,
-  matchingMostrable,
 } from '../utils/bolsa-busqueda.js';
 
 function inicialesNombre(nombre = '') {
@@ -11,22 +10,6 @@ function inicialesNombre(nombre = '') {
   if (!parts.length) return '--';
   if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
   return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
-}
-
-function renderMatchingCell(matching) {
-  if (matching == null) {
-    return `<span class="bolsa-matching-cell__empty">—</span>`;
-  }
-
-  const value = Math.max(0, Math.min(100, Number(matching) || 0));
-  return `
-    <div class="bolsa-matching-cell">
-      <span class="bolsa-matching-cell__value">${value}%</span>
-      <div class="bolsa-matching-cell__track" aria-hidden="true">
-        <span class="bolsa-matching-cell__fill" style="width:${value}%"></span>
-      </div>
-    </div>
-  `;
 }
 
 function renderCeldaProfesional(p) {
@@ -94,7 +77,6 @@ export function renderTablaCandidatos(profesionales = [], comparadorIds = [], op
             <th scope="col">Profesional</th>
             <th scope="col">Disponibilidad</th>
             <th scope="col">Seniority</th>
-            <th scope="col">Matching</th>
             <th scope="col">Coste/día</th>
             <th scope="col">Acción</th>
           </tr>
@@ -123,7 +105,6 @@ export function renderTablaCandidatos(profesionales = [], comparadorIds = [], op
                       ${labelSeniority(p.seniority)} · ${p.experienciaAnios ?? '—'} años
                     </span>
                   </td>
-                  <td>${renderMatchingCell(matchingMostrable(p))}</td>
                   <td class="bolsa-table__coste">${tarifa != null ? `${tarifa} €` : '—'}</td>
                   <td>
                     <a class="btn btn--ghost bolsa-table__link" href="#/ficha/${p.id}">
@@ -157,7 +138,6 @@ export function renderTablaGdd(profesionales = [], comparadorIds = [], opts = {}
             <th scope="col">Profesional</th>
             <th scope="col">Estado</th>
             <th scope="col">Disponibilidad</th>
-            <th scope="col">Matching</th>
             <th scope="col">Coste/día</th>
             <th scope="col">Acciones</th>
           </tr>
@@ -178,7 +158,6 @@ export function renderTablaGdd(profesionales = [], comparadorIds = [], opts = {}
                   <td>${renderCeldaProfesional(p)}</td>
                   <td>${renderBadgeEstado({ estado: estadoLabel })}</td>
                   <td class="bolsa-table__pct-cell">${pct != null ? `${pct}%` : '—'}</td>
-                  <td>${renderMatchingCell(matchingMostrable(p))}</td>
                   <td class="bolsa-table__coste">${tarifa != null ? `${tarifa} €` : '—'}</td>
                   <td>
                     <div class="bolsa-acciones">
