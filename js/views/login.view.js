@@ -47,7 +47,7 @@ export function renderLoginView(container) {
 
           <div class="login-brand__content">
             <p class="login-brand__eyebrow">AyesaON</p>
-            <h1 class="login-brand__title">Gestión de la Demanda</h1>
+            <h1 class="login-brand__title">Portal de Disponibilidad</h1>
             <p class="login-brand__subtitle">
               Plataforma Inteligente de Talento
             </p>
