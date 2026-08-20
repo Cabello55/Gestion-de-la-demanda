@@ -1,6 +1,5 @@
 import { renderBadgeEstado } from './badge-estado.js';
 import { getNombreRp } from '../data/catalogo-rp.js';
-import { puedeEditarSolicitud, puedeCancelarSolicitud } from '../utils/solicitudes-helpers.js';
 
 function formatFecha(iso) {
   if (!iso) return '—';
@@ -12,50 +11,6 @@ function formatFecha(iso) {
 function nombreProfesional(profesionalId, profById) {
   if (!profesionalId) return '—';
   return profById.get(profesionalId)?.nombre ?? '—';
-}
-
-function renderAccionesRpKcm(s) {
-  const editar = puedeEditarSolicitud(s.estado);
-  const cancelar = puedeCancelarSolicitud(s.estado);
-  if (!editar && !cancelar) return '';
-
-  return `
-    <div class="sol-row-actions">
-      ${
-        editar
-          ? `
-        <a
-          class="sol-icon-btn"
-          href="#/solicitudes/${s.id}/editar"
-          data-action="editar-solicitud"
-          data-id="${s.id}"
-          aria-label="Editar solicitud ${s.id}"
-          title="Editar"
-        >
-          <i class="fa-solid fa-pen" aria-hidden="true"></i>
-        </a>
-      `
-          : ''
-      }
-      ${
-        cancelar
-          ? `
-        <button
-          type="button"
-          class="sol-icon-btn sol-icon-btn--danger"
-          data-action="cancelar-solicitud"
-          data-id="${s.id}"
-          data-estado="${s.estado}"
-          aria-label="Cancelar solicitud ${s.id}"
-          title="Cancelar"
-        >
-          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-        </button>
-      `
-          : ''
-      }
-    </div>
-  `;
 }
 
 /**
@@ -111,7 +66,7 @@ export function renderTablaSolicitudesProfesional(solicitudes = []) {
 }
 
 /**
- * Tabla de solicitudes para RP y KCM.
+ * Tabla de solicitudes para RP.
  */
 export function renderTablaSolicitudesRpKcm(solicitudes = [], { mostrarRp = false, profById = new Map() } = {}) {
   if (!solicitudes.length) return '';
@@ -129,7 +84,6 @@ export function renderTablaSolicitudesRpKcm(solicitudes = [], { mostrarRp = fals
             <th>Estado</th>
             <th>Fecha solicitud</th>
             <th>Fin estimado</th>
-            <th class="sol-table__actions-col">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -145,7 +99,6 @@ export function renderTablaSolicitudesRpKcm(solicitudes = [], { mostrarRp = fals
               <td>${renderBadgeEstado({ estado: s.estado })}</td>
               <td>${formatFecha(s.fechaSolicitud)}</td>
               <td>${formatFecha(s.finEstimado)}</td>
-              <td class="sol-table__actions">${renderAccionesRpKcm(s)}</td>
             </tr>
           `
             )
