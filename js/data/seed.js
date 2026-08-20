@@ -34,14 +34,37 @@ function migrateHistoricoEstados(historico = []) {
 }
 
 function migrateValoraciones(valoraciones = []) {
-  return valoraciones.map((v) => ({
-    comunicacion: 4.0,
-    autonomia: 4.0,
-    trabajoEquipo: 4.0,
-    responsable: '—',
-    comentario: '',
-    ...v,
-  }));
+  return valoraciones.map((v) => {
+    if (v.conocimiento != null) {
+      return v;
+    }
+
+    const toDiez = (val) => (val == null ? null : Math.round(Number(val) * 20) / 10);
+    const general = toDiez(v.global);
+    const conocimiento = toDiez(v.tecnica);
+    const implicacion = toDiez(v.comunicacion ?? v.autonomia);
+    const iniciativa = toDiez(v.autonomia);
+    const trabajoEquipo = toDiez(v.trabajoEquipo);
+    const dimensiones = [general, conocimiento, implicacion, iniciativa, trabajoEquipo].filter(
+      (n) => n != null
+    );
+    const media =
+      v.media ??
+      (dimensiones.length
+        ? Math.round((dimensiones.reduce((acc, n) => acc + n, 0) / dimensiones.length) * 10) / 10
+        : null);
+
+    return {
+      proyecto: v.proyecto,
+      media,
+      general,
+      conocimiento,
+      implicacion,
+      iniciativa,
+      trabajoEquipo,
+      fecha: v.fecha,
+    };
+  });
 }
 
 function defaultHistoricoDisponibilidadPersonal(prof) {
@@ -131,7 +154,7 @@ export function seedIfNeeded() {
           p.matchingDemo == null ||
           !Array.isArray(p.experiencia) ||
           (p.historicoEstados ?? []).some((h) => !h.motivo) ||
-          (p.valoraciones ?? []).some((v) => v.comunicacion == null) ||
+          (p.valoraciones ?? []).some((v) => v.conocimiento == null) ||
           (p.historicoDisponibilidadPersonal ?? []).length < 6 ||
           (p.id === 'PROF-001' && !p.resumenProfesional)
       ) || (parsed.profesionales ?? []).length < seed.profesionales.length;

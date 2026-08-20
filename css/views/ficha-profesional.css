@@ -610,6 +610,43 @@
   padding: var(--space-5);
 }
 
+.ficha-modal__card.ficha-modal__card--valoraciones {
+  width: min(calc(100vw - 48px), 1120px);
+  max-width: 1120px;
+  max-height: min(90vh, 760px);
+  display: flex;
+  flex-direction: column;
+}
+
+.ficha-modal__body {
+  overflow: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.ficha-table-wrap--valoraciones {
+  overflow-x: auto;
+}
+
+.ficha-table--valoraciones-historico {
+  width: 100%;
+  min-width: 980px;
+}
+
+.ficha-table--valoraciones-historico th,
+.ficha-table--valoraciones-historico td {
+  font-size: 13px;
+  padding: 10px 12px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.ficha-table--valoraciones-historico th:first-child,
+.ficha-table--valoraciones-historico td:first-child {
+  text-align: left;
+  min-width: 180px;
+}
+
 .ficha-modal__head {
   display: flex;
   align-items: center;

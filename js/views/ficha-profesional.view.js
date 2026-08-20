@@ -244,13 +244,19 @@ function renderEntradaFormacion(f) {
 function mediaValoraciones(prof) {
   const vals = prof.valoraciones ?? [];
   if (!vals.length) return null;
-  const sum = vals.reduce((acc, v) => acc + (v.global ?? 0), 0);
+  const sum = vals.reduce((acc, v) => acc + (v.media ?? v.general ?? 0), 0);
   return Math.round((sum / vals.length) * 10) / 10;
 }
 
-function renderEstrellas(nota) {
-  const full = Math.floor(nota);
-  const half = nota - full >= 0.5;
+function formatValoracion(val) {
+  if (val == null) return '—';
+  return Number(val).toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+}
+
+function renderEstrellas(nota, max = 10) {
+  const normalized = (Number(nota) / max) * 5;
+  const full = Math.floor(normalized);
+  const half = normalized - full >= 0.5;
   let html = '';
   for (let i = 0; i < 5; i++) {
     if (i < full) html += '<i class="fa-solid fa-star ficha-star ficha-star--on"></i>';
@@ -270,7 +276,7 @@ function renderBloqueValoraciones(prof) {
     <div class="ficha-valoraciones">
       <div class="ficha-valoraciones__score">
         <span class="ficha-valoraciones__num">${media?.toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}</span>
-        <span class="ficha-valoraciones__max">/ 5</span>
+        <span class="ficha-valoraciones__max">/ 10</span>
       </div>
       <div class="ficha-stars" aria-hidden="true">${renderEstrellas(media ?? 0)}</div>
       <p class="ficha-muted">Basado en ${vals.length} valoracion${vals.length === 1 ? '' : 'es'}</p>
@@ -509,43 +515,66 @@ function renderTabDisponibilidad(prof) {
   `;
 }
 
+function renderTablaValoracionesHistorico(vals = []) {
+  if (!vals.length) {
+    return `<p class="ficha-muted">Sin valoraciones registradas</p>`;
+  }
+
+  return `
+    <div class="ficha-table-wrap ficha-table-wrap--valoraciones">
+      <table class="ficha-table ficha-table--valoraciones-historico">
+        <thead>
+          <tr>
+            <th>Proyecto</th>
+            <th>Media</th>
+            <th>General</th>
+            <th>Conocimiento</th>
+            <th>Implicación</th>
+            <th>Iniciativa</th>
+            <th>Trabajo en equipo</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${vals
+            .map(
+              (v) => `
+            <tr>
+              <td>${v.proyecto ?? '—'}</td>
+              <td>${formatValoracion(v.media)}</td>
+              <td>${formatValoracion(v.general)}</td>
+              <td>${formatValoracion(v.conocimiento)}</td>
+              <td>${formatValoracion(v.implicacion)}</td>
+              <td>${formatValoracion(v.iniciativa)}</td>
+              <td>${formatValoracion(v.trabajoEquipo)}</td>
+              <td>${formatFecha(v.fecha)}</td>
+            </tr>
+          `
+            )
+            .join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
 function renderModalValoraciones(prof) {
-  const vals = prof.valoraciones ?? [];
+  const vals = [...(prof.valoraciones ?? [])].sort((a, b) =>
+    String(b.fecha).localeCompare(String(a.fecha))
+  );
   return `
     <div class="ficha-modal" data-modal="valoraciones" role="dialog" aria-modal="true">
       <div class="ficha-modal__backdrop" data-action="cerrar-modal"></div>
-      <div class="ficha-modal__card ficha-modal__card--wide">
+      <div class="ficha-modal__card ficha-modal__card--valoraciones">
         <header class="ficha-modal__head">
           <h2 class="ficha-modal__title">Histórico de valoraciones</h2>
           <button type="button" class="ficha-modal__close" data-action="cerrar-modal" aria-label="Cerrar">
             <i class="fa-solid fa-xmark" aria-hidden="true"></i>
           </button>
         </header>
-        ${
-          vals.length
-            ? `
-          <div class="ficha-table-wrap">
-            <table class="ficha-table">
-              <thead><tr><th>Proyecto</th><th>Valoración</th><th>Técnica</th><th>Fecha</th></tr></thead>
-              <tbody>
-                ${vals
-                  .map(
-                    (v) => `
-                  <tr>
-                    <td>${v.proyecto ?? '—'}</td>
-                    <td>${v.global ?? '—'}</td>
-                    <td>${v.tecnica ?? '—'}</td>
-                    <td>${formatFecha(v.fecha)}</td>
-                  </tr>
-                `
-                  )
-                  .join('')}
-              </tbody>
-            </table>
-          </div>
-        `
-            : `<p class="ficha-muted">Sin valoraciones registradas</p>`
-        }
+        <div class="ficha-modal__body">
+          ${renderTablaValoracionesHistorico(vals)}
+        </div>
         <footer class="ficha-modal__footer">
           <button type="button" class="btn btn--primary" data-action="cerrar-modal">Cerrar</button>
         </footer>
@@ -621,45 +650,7 @@ function renderTablaValoracionesGdd(prof) {
   const vals = [...(prof.valoraciones ?? [])].sort((a, b) =>
     String(b.fecha).localeCompare(String(a.fecha))
   );
-  if (!vals.length) return `<p class="ficha-muted">Sin valoraciones registradas</p>`;
-
-  return `
-    <div class="ficha-table-wrap">
-      <table class="ficha-table ficha-table--valoraciones">
-        <thead>
-          <tr>
-            <th>Fecha</th><th>Proyecto</th><th>Val. global</th><th>Val. técnica</th>
-            <th>Comunicación</th><th>Autonomía</th><th>Trabajo en equipo</th>
-            <th>Responsable</th><th>Comentario</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${vals
-            .map(
-              (v) => `
-            <tr>
-              <td>${formatFecha(v.fecha)}</td>
-              <td>${v.proyecto ?? '—'}</td>
-              <td>
-                <span class="ficha-val-cell">
-                  ${v.global?.toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) ?? '—'}
-                  <span class="ficha-stars ficha-stars--inline" aria-hidden="true">${renderEstrellas(v.global ?? 0)}</span>
-                </span>
-              </td>
-              <td>${v.tecnica?.toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) ?? '—'}</td>
-              <td>${v.comunicacion?.toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) ?? '—'}</td>
-              <td>${v.autonomia?.toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) ?? '—'}</td>
-              <td>${v.trabajoEquipo?.toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) ?? '—'}</td>
-              <td>${v.responsable ?? '—'}</td>
-              <td>${v.comentario ? `"${v.comentario}"` : '—'}</td>
-            </tr>
-          `
-            )
-            .join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
+  return renderTablaValoracionesHistorico(vals);
 }
 
 function renderAccionesRapidasGdd(prof) {
