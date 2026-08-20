@@ -4,7 +4,6 @@ import {
   getHistoricoDisponibilidad,
   getIntegraciones,
   getLogs,
-  getNotificacionesConfig,
   getProfesionales,
   getSolicitudes,
   getSolicitudesActualizacion,
@@ -16,13 +15,9 @@ import { getNombreRp } from '../data/catalogo-rp.js';
 import { normalizarRolKey } from '../permisos/permisos.js';
 import {
   agregarSolicitudesPorEstado,
-  countPendientesAmbitoKcm,
   countPendientesPorResponsable,
   countRecursosAsignados,
-  countSolicitudesActivasPorKcm,
   countSolicitudesActivasPorRp,
-  getSolicitudesAmbitoKcm,
-  getSolicitudesPorKcm,
   getSolicitudesPorRp,
   getSolicitudesRecientes,
   rankingProyectosAprobados,
@@ -703,27 +698,6 @@ function renderTablaEquipo(solicitudes) {
   `;
 }
 
-function renderAccesoRapidoKcm() {
-  return `
-    <div class="inicio-quick">
-      <a class="inicio-quick__card" href="#/bolsa-profesionales">
-        <span class="inicio-quick__icon" aria-hidden="true"><i class="fa-solid fa-magnifying-glass"></i></span>
-        <span class="inicio-quick__body">
-          <span class="inicio-quick__title">Buscar profesionales</span>
-          <span class="inicio-quick__cta">Ir al buscador ›</span>
-        </span>
-      </a>
-      <a class="inicio-quick__card" href="#/solicitudes/nueva">
-        <span class="inicio-quick__icon" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
-        <span class="inicio-quick__body">
-          <span class="inicio-quick__title">Nueva solicitud</span>
-          <span class="inicio-quick__cta">Crear solicitud ›</span>
-        </span>
-      </a>
-    </div>
-  `;
-}
-
 function renderMetricCard({ title, count, emptyText, meta, href, linkLabel }) {
   const body =
     count === 0
@@ -739,109 +713,6 @@ function renderMetricCard({ title, count, emptyText, meta, href, linkLabel }) {
       ${body}
       ${renderNavLink(href, linkLabel)}
     </article>
-  `;
-}
-
-function renderInicioKcm(container, usuarioActivo) {
-  const kcmId = usuarioActivo.id;
-  const solicitudes = getSolicitudes();
-  const profesionales = getProfesionales();
-
-  const propiasActivas = countSolicitudesActivasPorRp(solicitudes, kcmId);
-  const equipoActivas = countSolicitudesActivasPorKcm(solicitudes, kcmId);
-  const ambito = getSolicitudesAmbitoKcm(solicitudes, kcmId);
-  const recursosAsignados = countRecursosAsignados(ambito, profesionales);
-  const pendientes = countPendientesAmbitoKcm(solicitudes, kcmId);
-  const countsEstado = agregarSolicitudesPorEstado(ambito);
-  const ranking = rankingProyectosAprobados(ambito, 5);
-  const equipoRecientes = getSolicitudesRecientes(
-    getSolicitudesPorKcm(solicitudes, kcmId).filter((s) => s.rpResponsableId !== kcmId),
-    3
-  );
-
-  container.innerHTML = `
-    <section class="inicio">
-      <header class="inicio__header">
-        <h1 class="inicio__title">Hola, ${usuarioActivo.nombre} (KCM)</h1>
-        <p class="inicio__subtitle">Vista general de tu área y solicitudes bajo tu responsabilidad.</p>
-      </header>
-
-      <div class="inicio-cards">
-        ${renderMetricCard({
-          title: 'Solicitudes propias',
-          count: propiasActivas,
-          emptyText: 'Sin solicitudes activas',
-          meta: 'activas',
-          href: '#/solicitudes?vista=propias',
-          linkLabel: 'Ver todas ›',
-        })}
-        ${renderMetricCard({
-          title: 'Solicitudes de mi equipo',
-          count: equipoActivas,
-          emptyText: 'Sin solicitudes de equipo',
-          meta: 'activas',
-          href: '#/solicitudes?vista=equipo',
-          linkLabel: 'Ver todas ›',
-        })}
-        ${renderMetricCard({
-          title: 'Recursos asignados',
-          count: recursosAsignados,
-          emptyText: 'Sin recursos asignados',
-          meta: 'en proyectos',
-          href: '#/solicitudes?vista=asignados',
-          linkLabel: 'Ver todos ›',
-        })}
-        ${renderMetricCard({
-          title: 'Recursos pendientes',
-          count: pendientes,
-          emptyText: 'Nada pendiente por asignar',
-          meta: 'por asignar',
-          href: '#/solicitudes?vista=pendientes',
-          linkLabel: 'Ver todos ›',
-        })}
-      </div>
-
-      <div class="inicio-grid-2">
-        <section class="inicio-block">
-          <div class="inicio-block__head">
-            <h2 class="inicio-block__title">Solicitudes por estado (propias + equipo)</h2>
-          </div>
-          ${renderDonutSolicitudes(countsEstado)}
-          <div class="inicio-block__footer">
-            ${renderNavLink('#/solicitudes', 'Ver todas las solicitudes ›')}
-          </div>
-        </section>
-
-        <section class="inicio-block">
-          <div class="inicio-block__head">
-            <h2 class="inicio-block__title">Recursos asignados por proyecto (Top 5)</h2>
-          </div>
-          ${renderBarrasProyectos(ranking)}
-          <div class="inicio-block__footer">
-            ${renderNavLink('#/solicitudes?vista=asignados', 'Ver todos los recursos asignados ›')}
-          </div>
-        </section>
-      </div>
-
-      <div class="inicio-grid-2">
-        <section class="inicio-block">
-          <div class="inicio-block__head">
-            <h2 class="inicio-block__title">Solicitudes recientes de mi equipo</h2>
-          </div>
-          ${renderTablaEquipo(equipoRecientes)}
-          <div class="inicio-block__footer">
-            ${renderNavLink('#/solicitudes?vista=equipo', 'Ver todas ›')}
-          </div>
-        </section>
-
-        <section class="inicio-block">
-          <div class="inicio-block__head">
-            <h2 class="inicio-block__title">Acceso rápido</h2>
-          </div>
-          ${renderAccesoRapidoKcm()}
-        </section>
-      </div>
-    </section>
   `;
 }
 
@@ -1126,7 +997,6 @@ function renderLineaDisponibilidad(puntos = []) {
 const ROL_DISTRIBUCION = [
   { key: 'PROFESIONAL', label: 'Profesional' },
   { key: 'RP', label: 'RP' },
-  { key: 'KCM', label: 'KCM' },
   { key: 'GDD', label: 'GDD' },
   { key: 'ADMIN', label: 'Admin' },
 ];
@@ -1271,13 +1141,11 @@ function renderInicioAdmin(container, usuarioActivo) {
   const usuarios = getUsuarios();
   const logs = getLogs();
   const integraciones = getIntegraciones();
-  const notifConfig = getNotificacionesConfig();
 
   const alertas24h = logs.filter(
     (l) => ['error', 'warning'].includes(String(l.nivel).toLowerCase()) && esLogReciente24h(l.fecha)
   ).length;
   const integracionesActivas = integraciones.filter((i) => i.estado === 'Activa').length;
-  const notifActivas = notifConfig.filter((n) => n.activa).length;
   const distribucion = agregarUsuariosPorRol(usuarios);
   const logsRecientes = [...logs]
     .sort((a, b) => String(b.fecha).localeCompare(String(a.fecha)))
@@ -1313,14 +1181,6 @@ function renderInicioAdmin(container, usuarioActivo) {
           <p class="inicio-card__meta">activas</p>
           ${renderNavLink('#/admin/integraciones', 'Ver integraciones ›')}
         </article>
-        ${renderMetricCard({
-          title: 'Notificaciones configuradas',
-          count: notifActivas,
-          emptyText: 'Sin reglas activas',
-          meta: 'reglas activas',
-          href: '#/admin/notificaciones',
-          linkLabel: 'Configurar ›',
-        })}
       </div>
 
       <div class="inicio-grid-2">
@@ -1401,11 +1261,6 @@ export function renderInicioView(container) {
 
   if (usuarioActivo?.rolKey === 'RP') {
     renderInicioRp(container, usuarioActivo);
-    return;
-  }
-
-  if (usuarioActivo?.rolKey === 'KCM') {
-    renderInicioKcm(container, usuarioActivo);
     return;
   }
 

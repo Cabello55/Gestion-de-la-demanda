@@ -24,7 +24,7 @@ export const NAVEGACION_POR_ROL = {
       { ruta: 'bolsa-profesionales', label: 'Bolsa de Profesionales', href: '#/bolsa-profesionales' },
       { ruta: 'solicitudes', label: 'Solicitudes', href: '#/solicitudes' },
     ],
-    // Sidebar RP según Inicio [4.1]: Inicio, Buscar, Mis Solicitudes, Recursos Incorporados, Notificaciones.
+    // Sidebar RP según Inicio [4.1]: Inicio, Buscar, Mis Solicitudes, Recursos Incorporados.
     sidebar: [
       { ruta: 'inicio', label: 'Inicio', href: '#/inicio', icon: 'fa-house' },
       {
@@ -39,50 +39,6 @@ export const NAVEGACION_POR_ROL = {
         label: 'Recursos Incorporados',
         href: null,
         icon: 'fa-box',
-      },
-      {
-        ruta: 'notificaciones',
-        label: 'Notificaciones',
-        href: null,
-        icon: 'fa-bell',
-        badge: 5,
-      },
-    ],
-  },
-
-  KCM: {
-    // Header con Informes (decisión confirmada: KCM y GDD sí lo mantienen).
-    header: [
-      { ruta: 'inicio', label: 'Inicio', href: '#/inicio' },
-      { ruta: 'bolsa-profesionales', label: 'Bolsa de Profesionales', href: '#/bolsa-profesionales' },
-      { ruta: 'solicitudes', label: 'Solicitudes', href: '#/solicitudes' },
-      { ruta: 'informes', label: 'Informes', href: null },
-    ],
-    // Sidebar KCM según Inicio [4.1].
-    sidebar: [
-      { ruta: 'inicio', label: 'Inicio', href: '#/inicio', icon: 'fa-house' },
-      { ruta: 'solicitudes', label: 'Mis Solicitudes', href: '#/solicitudes', icon: 'fa-file-lines' },
-      {
-        ruta: 'solicitudes-equipo',
-        label: 'Solicitudes de mi Equipo',
-        href: '#/solicitudes?vista=equipo',
-        icon: 'fa-users',
-      },
-      { ruta: 'recursos-asignados', label: 'Recursos Asignados', href: null, icon: 'fa-box' },
-      { ruta: 'recursos-pendientes', label: 'Recursos Pendientes', href: null, icon: 'fa-hourglass-half' },
-      {
-        ruta: 'bolsa-profesionales',
-        label: 'Buscar Profesionales',
-        href: '#/bolsa-profesionales',
-        icon: 'fa-magnifying-glass',
-      },
-      { ruta: 'informes', label: 'Informes', href: null, icon: 'fa-chart-column' },
-      {
-        ruta: 'notificaciones',
-        label: 'Notificaciones',
-        href: null,
-        icon: 'fa-bell',
-        badge: 6,
       },
     ],
   },
@@ -113,13 +69,6 @@ export const NAVEGACION_POR_ROL = {
         icon: 'fa-triangle-exclamation',
       },
       { ruta: 'informes', label: 'Informes', href: null, icon: 'fa-chart-column' },
-      {
-        ruta: 'notificaciones',
-        label: 'Notificaciones',
-        href: null,
-        icon: 'fa-bell',
-        badge: 9,
-      },
     ],
   },
 
@@ -161,12 +110,6 @@ export const NAVEGACION_POR_ROL = {
         label: 'Logs y Auditoría',
         href: '#/admin/logs',
         icon: 'fa-file-lines',
-      },
-      {
-        ruta: 'admin-notificaciones',
-        label: 'Notificaciones (config.)',
-        href: '#/admin/notificaciones',
-        icon: 'fa-bell',
       },
     ],
   },

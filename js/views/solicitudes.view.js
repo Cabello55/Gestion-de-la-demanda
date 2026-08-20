@@ -14,7 +14,6 @@ import { getNombreRp } from '../data/catalogo-rp.js';
 import {
   getSolicitudesPorProfesional,
   getSolicitudesAmbitoRp,
-  getSolicitudesAmbitoKcmEquipo,
   contarResumenSolicitudes,
   filtrarSolicitudesPorTab,
   ordenarSolicitudesPorFecha,
@@ -26,7 +25,7 @@ import {
   renderModalCancelarSolicitud,
 } from '../components/tabla-solicitudes.js';
 
-const ROLES_SOLICITUDES_RP_KCM = ['RP', 'KCM'];
+const ROLES_SOLICITUDES_RP = ['RP'];
 
 const TABS_ESTADO = [
   { id: 'todas', label: 'Todas' },
@@ -65,10 +64,6 @@ function buildSolicitudesHash(query = {}) {
 function getTabActivo(query) {
   const tab = query?.tab ?? 'todas';
   return TABS_ESTADO.some((t) => t.id === tab) ? tab : 'todas';
-}
-
-function getAmbitoKcm(query) {
-  return query?.ambito === 'equipo' ? 'equipo' : 'propias';
 }
 
 function renderCardResumen(label, count, meta) {
@@ -111,33 +106,6 @@ function renderTabsEstado(tabActivo) {
           </button>
         `;
       }).join('')}
-    </div>
-  `;
-}
-
-function renderSelectorAmbitoKcm(ambitoActivo) {
-  return `
-    <div class="sol-ambito" role="tablist" aria-label="Ámbito de solicitudes">
-      <button
-        type="button"
-        class="sol-ambito__btn ${ambitoActivo === 'propias' ? 'sol-ambito__btn--active' : ''}"
-        role="tab"
-        aria-selected="${ambitoActivo === 'propias'}"
-        data-action="cambiar-ambito"
-        data-ambito="propias"
-      >
-        Propias
-      </button>
-      <button
-        type="button"
-        class="sol-ambito__btn ${ambitoActivo === 'equipo' ? 'sol-ambito__btn--active' : ''}"
-        role="tab"
-        aria-selected="${ambitoActivo === 'equipo'}"
-        data-action="cambiar-ambito"
-        data-ambito="equipo"
-      >
-        Solicitudes de mi equipo
-      </button>
     </div>
   `;
 }
@@ -287,15 +255,11 @@ function wireNavegacionFilas(root, accionesExcluidas = []) {
   });
 }
 
-function wireSolicitudesListado(root, ctx, { onTab, onAmbito, onVista, onConfirmarEntrevista, onCancelar }) {
+function wireSolicitudesListado(root, ctx, { onTab, onVista, onConfirmarEntrevista, onCancelar }) {
   wireDropdownVista(root);
 
   root.querySelectorAll('[data-action="cambiar-tab"]').forEach((btn) => {
     btn.addEventListener('click', () => onTab(btn.dataset.tab));
-  });
-
-  root.querySelectorAll('[data-action="cambiar-ambito"]').forEach((btn) => {
-    btn.addEventListener('click', () => onAmbito(btn.dataset.ambito));
   });
 
   root.querySelectorAll('[data-action="set-vista"]').forEach((btn) => {
@@ -334,17 +298,14 @@ function renderListadoSolicitudes({
   rerender,
   subtitulo,
   accionesHeader = '',
-  selectorAmbito = '',
   obtenerBase,
   emptyMessage,
-  emptyEquipoMessage,
   renderTabla,
   renderCalendario,
 }) {
   const query = ctx.query ?? {};
   const tabActivo = getTabActivo(query);
   const vistaCalendario = query.vista === 'calendario';
-  const ambito = getAmbitoKcm(query);
 
   const todas = ordenarSolicitudesPorFecha(obtenerBase());
   const resumen = contarResumenSolicitudes(todas);
@@ -353,15 +314,7 @@ function renderListadoSolicitudes({
   const desde = total ? 1 : 0;
   const hasta = total;
 
-  const emptyEquipo = ambito === 'equipo' && todas.length === 0 && emptyEquipoMessage;
-  const tieneSelector = Boolean(selectorAmbito);
-  const emptySinSelector = !tieneSelector && todas.length === 0;
-  const emptyConSelector = tieneSelector && todas.length === 0;
-  const emptyTexto = emptyEquipo
-    ? emptyEquipoMessage
-    : emptyConSelector
-      ? emptyMessage
-      : emptyMessage;
+  const emptySinDatos = todas.length === 0;
 
   container.innerHTML = `
     <section class="sol">
@@ -379,14 +332,9 @@ function renderListadoSolicitudes({
       ${renderCardsResumen(resumen)}
 
       ${
-        emptySinSelector
+        emptySinDatos
           ? renderEmpty(emptyMessage)
           : `
-        ${selectorAmbito}
-        ${
-          emptyConSelector
-            ? renderEmpty(emptyTexto)
-            : `
         ${renderTabsEstado(tabActivo)}
         <div class="sol-tabpanel" role="tabpanel">
           ${
@@ -399,8 +347,6 @@ function renderListadoSolicitudes({
         </div>
         ${renderPieListado(desde, hasta, total)}
       `
-        }
-      `
       }
     </section>
   `;
@@ -411,10 +357,6 @@ function renderListadoSolicitudes({
     onTab: (tab) => {
       const next = { ...query, tab };
       if (next.vista === 'tabla') delete next.vista;
-      window.location.hash = buildSolicitudesHash(next);
-    },
-    onAmbito: (nextAmbito) => {
-      const next = { ...query, ambito: nextAmbito };
       window.location.hash = buildSolicitudesHash(next);
     },
     onVista: (vista) => {
@@ -457,36 +399,24 @@ function renderSolicitudesProfesional(container, ctx) {
   });
 }
 
-function renderSolicitudesRpKcm(container, ctx) {
+function renderSolicitudesRp(container, ctx) {
   const usuarioActivo = ctx.usuarioActivo ?? getUsuarioActivo();
   const userId = usuarioActivo?.id;
-  const esKcm = usuarioActivo?.rolKey === 'KCM';
-  const query = ctx.query ?? {};
-  const ambito = getAmbitoKcm(query);
   const profesionales = getProfesionales();
   const profById = new Map(profesionales.map((p) => [p.id, p]));
 
-  const obtenerBase = () => {
-    const solicitudes = getSolicitudes();
-    if (esKcm && ambito === 'equipo') {
-      return getSolicitudesAmbitoKcmEquipo(solicitudes, userId);
-    }
-    return getSolicitudesAmbitoRp(solicitudes, userId);
-  };
+  const obtenerBase = () => getSolicitudesAmbitoRp(getSolicitudes(), userId);
 
   renderListadoSolicitudes({
     container,
     ctx,
-    rerender: () => renderSolicitudesRpKcm(container, ctx),
+    rerender: () => renderSolicitudesRp(container, ctx),
     subtitulo: 'Solicitudes que has creado.',
     accionesHeader: `<a class="btn btn--primary" href="#/solicitudes/nueva">+ Nueva solicitud</a>`,
-    selectorAmbito: esKcm ? renderSelectorAmbitoKcm(ambito) : '',
     obtenerBase,
     emptyMessage: 'Aún no has creado ninguna solicitud',
-    emptyEquipoMessage: 'Aún no hay solicitudes de tu equipo',
     renderTabla: (filtradas) =>
       renderTablaSolicitudesRpKcm(filtradas, {
-        mostrarRp: esKcm && ambito === 'equipo',
         profById,
       }),
     renderCalendario: (filtradas) => renderCalendarioSolicitudes(filtradas, { profById }),
@@ -1385,8 +1315,8 @@ export function renderSolicitudesView(container, ctx) {
     return;
   }
 
-  if (ROLES_SOLICITUDES_RP_KCM.includes(usuarioActivo?.rolKey)) {
-    renderSolicitudesRpKcm(container, ctx);
+  if (ROLES_SOLICITUDES_RP.includes(usuarioActivo?.rolKey)) {
+    renderSolicitudesRp(container, ctx);
     return;
   }
 

@@ -8,7 +8,7 @@ import {
 } from '../utils/comparador-state.js';
 import { getTagsProfesional, MAX_COMPARADOR } from '../utils/bolsa-busqueda.js';
 
-const ROLES_FICHA_TERCEROS = ['RP', 'KCM'];
+const ROLES_FICHA_TERCEROS = ['RP'];
 
 const FICHA_TABS = [
   { id: 'resumen', label: 'Resumen' },

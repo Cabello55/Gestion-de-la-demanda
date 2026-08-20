@@ -18,14 +18,6 @@ export const usuariosDemo = [
     accentColor: 'azul-cielo',
   },
   {
-    id: 'USR-KCM-001',
-    rolKey: 'KCM',
-    nombre: 'Javier Vidal',
-    avatarIniciales: 'JV',
-    descripcion: 'Busca y solicita talento para las cuentas bajo su responsabilidad.',
-    accentColor: 'indigo-lavanda',
-  },
-  {
     id: 'USR-GDD-001',
     rolKey: 'GDD',
     nombre: 'Íñigo',
@@ -46,7 +38,6 @@ export const usuariosDemo = [
 export const rolesLabels = {
   PROFESIONAL: 'Profesional',
   RP: 'Responsable de Proyecto',
-  KCM: 'Key Contract Manager',
   GDD: 'Gestión de la Demanda',
   GESTOR: 'Gestor de Plataforma',
   ADMIN: 'Gestor de Plataforma',
@@ -54,7 +45,7 @@ export const rolesLabels = {
 
 /**
  * Catálogo de usuarios de plataforma (Admin).
- * `rol`: PROFESIONAL | RP | KCM | GDD | ADMIN
+ * `rol`: PROFESIONAL | RP | GDD | ADMIN
  */
 export const mockUsuarios = [
   {
@@ -71,15 +62,6 @@ export const mockUsuarios = [
     nombre: 'Ana García',
     rol: 'RP',
     email: 'ana.garcia@ayesa.com',
-    esUsuarioDemo: true,
-    fechaAlta: '2025-09-01',
-    activo: true,
-  },
-  {
-    id: 'USR-KCM-001',
-    nombre: 'Javier Vidal',
-    rol: 'KCM',
-    email: 'javier.vidal@ayesa.com',
     esUsuarioDemo: true,
     fechaAlta: '2025-09-01',
     activo: true,
@@ -172,24 +154,6 @@ export const mockUsuarios = [
     email: 'elena.navarro@ayesa.com',
     esUsuarioDemo: false,
     fechaAlta: '2026-03-01',
-    activo: true,
-  },
-  {
-    id: 'USR-KCM-002',
-    nombre: 'Patricia Romero',
-    rol: 'KCM',
-    email: 'patricia.romero@ayesa.com',
-    esUsuarioDemo: false,
-    fechaAlta: '2025-11-18',
-    activo: true,
-  },
-  {
-    id: 'USR-KCM-003',
-    nombre: 'Diego Fernández',
-    rol: 'KCM',
-    email: 'diego.fernandez@ayesa.com',
-    esUsuarioDemo: false,
-    fechaAlta: '2026-01-22',
     activo: true,
   },
   {

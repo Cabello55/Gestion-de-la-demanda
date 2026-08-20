@@ -31,8 +31,8 @@ import {
   toggleComparador,
 } from '../utils/comparador-state.js';
 
-/** RP y KCM comparten la misma vista (Boceto §2.4 / §4.2). */
-const ROLES_BOLSA_BUSQUEDA = ['RP', 'KCM'];
+/** RP usa la vista de búsqueda (Boceto §2.4 / §4.2). */
+const ROLES_BOLSA_BUSQUEDA = ['RP'];
 const STORAGE_BUSQUEDAS = 'busquedasGuardadas';
 
 function createBolsaState(defaultFiltros) {
